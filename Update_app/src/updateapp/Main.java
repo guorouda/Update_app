@@ -9,9 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            if (Integer.parseInt(Updater.getLatestVersion()) > 0) {
-                new UpdateInfo(Updater.getWhatsNew());
-            }
+            new UpdateInfo();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
