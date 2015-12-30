@@ -73,6 +73,7 @@ public class UpdateInfo extends JFrame{
     	
 		System.out.println("started");
 		infoPane.setText("Tomcat Server started");
+		SimpleJob.startSchedule();
     }
     
     private void initComponents() {
@@ -124,8 +125,11 @@ public class UpdateInfo extends JFrame{
 				    }
 				}).start();
             	
-				System.out.println("started");
+            	start.setEnabled(false);
 				infoPane.setText("Tomcat Server started");
+				
+				String result = SimpleJob.startSchedule();
+				System.out.println(result);
             }
         });
         
@@ -136,16 +140,14 @@ public class UpdateInfo extends JFrame{
                          	 
 	            try {
 					if (Integer.parseInt(Updater.getLatestVersion()) > 0) {						
-					    update();
+					    AutoCheck.update();
 					}else{
 						
 					}
 				} catch (NumberFormatException e1) {
-					// TODO Auto-generated catch block
-//					e1.printStackTrace();
+					e1.printStackTrace();
 					infoPane.setText("Version Number error.");
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 					infoPane.setText("Connection error.");
 				}
@@ -159,14 +161,11 @@ public class UpdateInfo extends JFrame{
             	
             	new Thread(new Runnable() {
 				    public void run() {
-				        // TODO Auto-generated method stub
 				    	try {
+				    		 SimpleJob.stopSchedule();
 							 Main.stop();
-							 System.out.println("stopped");
 							 infoPane.setText("Tomcat Server stopped");
-							 
 						} catch (LifecycleException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 				    }
@@ -209,15 +208,7 @@ public class UpdateInfo extends JFrame{
         });
 
     }
-    private void update()
-    {
-        String[] run = {"java","-jar","update.jar"};
-        try {
-            Runtime.getRuntime().exec(run);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        System.exit(0);
-    }
+    
+
 
 }
